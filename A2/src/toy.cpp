@@ -28,6 +28,7 @@
 #include "draw_body.hpp"
 #include "transform.hpp"
 #include "display_list.hpp"
+#include "texture.hpp"
 
 std::string filename, progname;
 bool file_flag = false;
@@ -87,7 +88,9 @@ int main(int argc, char *argv[]) {
     //Initialize GL state
     csX75::initGL();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
     genDisplayList();
+    loadGLTextures();
     //std::cerr<<side_flap<<std::endl;
 
     // Loop until the user closes the window

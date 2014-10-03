@@ -7,7 +7,6 @@
 #include <GL/glew.h>
 
 #include "gl_framework.hpp"
-#include "draw_cube.hpp"
 #include "display_list.hpp"
 
 void draw_head(){

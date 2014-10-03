@@ -10,6 +10,4 @@
 
 void draw_head();
 
-
-
 #endif /* HEAD_HPP_ */

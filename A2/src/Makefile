@@ -6,7 +6,7 @@ LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB) $(GLU)
 LDFLAGS=-L/usr/local/lib 
 CPPFLAGS=-I/usr/local/include
 
-BIN=toylogo
+BIN=toyTransformer
 #SRCS=gl_framework.cpp toylogo.cpp draw_rectangle.cpp draw_cube.cpp draw_body.cpp leg.cpp head.cpp arm.cpp
 #INCLUDES=gl_framework.hpp draw_rectangle.hpp draw_cube.hpp draw_body.hpp leg.hpp head.hpp arm.hpp
 

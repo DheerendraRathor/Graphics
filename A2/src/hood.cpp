@@ -6,7 +6,6 @@
  */
 
 #include <GL/glew.h>
-#include "draw_rectangle.hpp"
 #include "transform.hpp"
 #include "hood.hpp"
 #include "display_list.hpp"

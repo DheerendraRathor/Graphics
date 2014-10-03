@@ -8,9 +8,7 @@
 #include <GL/glew.h>
 #include "gl_framework.hpp"
 #include "arm.hpp"
-#include "draw_cube.hpp"
 #include "transform.hpp"
-#include "wheel.hpp"
 #include "display_list.hpp"
 
 void draw_arm(int type){
@@ -47,9 +45,7 @@ void draw_arm(int type){
    }
    else glRotated(rArmLower1f, 1.0, 0.0, 0.0);
    glTranslated(0.0, 0.15, 0.07);
-    glPushAttrib(GL_CURRENT_BIT);
         glTranslated(0.0, -0.3, 0.0);
-        glColor3d(0.4, 0.1, 0.2);
         glCallList(lower_arm_list);
 
         if (type){
@@ -61,7 +57,6 @@ void draw_arm(int type){
         glRotated(90, 0.0, 1.0, 0.0);
         glColor3d(0.5, 0.5, 0.5);
         glCallList(arm_wheel_list);
-    glPopAttrib();
     glPopMatrix();
 }
 

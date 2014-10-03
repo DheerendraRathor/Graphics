@@ -3,7 +3,6 @@
 
 using namespace std;
 
-#include "draw_cube.hpp"
 #include "draw_body.hpp"
 #include "leg.hpp"
 #include "head.hpp"
@@ -21,7 +20,7 @@ void draw_body() {
         glRotated(torso2f, 0.0, 1.0, 0.0);
         glRotated(torso1f, 1.0, 0.0, 0.0);
         glPushAttrib(GL_CURRENT_BIT);
-            glColor4d(0.3, 0.1, 0.6, 0.1);
+           // glColor4d(0.3, 0.1, 0.6, 0.1);
             glCallList(torso_list);
         glPopAttrib();
 
