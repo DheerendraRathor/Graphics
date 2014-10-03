@@ -8,6 +8,6 @@
 #ifndef ARM_HPP_
 #define ARM_HPP_
 
-void draw_arm(int type);
+void draw_arm(int);
 
 #endif /* ARM_HPP_ */

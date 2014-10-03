@@ -8,7 +8,6 @@
 #ifndef LEG_HPP_
 #define LEG_HPP_
 
-#include "gl_framework.hpp"
 void draw_leg(int);
 
 

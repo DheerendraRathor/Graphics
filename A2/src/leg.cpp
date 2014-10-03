@@ -18,7 +18,19 @@ void draw_leg(int type){
     //Upper Leg rotation
     glTranslated(0.0, 0.15, 0.1);
     glRotated(upper_leg, 1.0, 0.0, 0.0);
-    glTranslated(0.0, -0.15, -0.1);
+    glTranslated(0.0, 0.0, -0.1);
+    if (type){
+        glRotated(lLeg1f, 1.0, 0.0, 0.0);
+        glRotated(lLeg2f, 0.0, 1.0, 0.0);
+        glRotated(lLeg3f, 0.0, 0.0, 1.0);
+    }
+    else {
+        glRotated(rLeg1f, 1.0, 0.0, 0.0);
+        glRotated(rLeg2f, 0.0, 1.0, 0.0);
+        glRotated(rLeg3f, 0.0, 0.0, 1.0);
+    }
+
+    glTranslated(0.0, -0.15, 0.0);
 
 
         glCallList(upper_leg_list);
@@ -26,6 +38,10 @@ void draw_leg(int type){
     //Lower Leg rotation
         glTranslated(0.0, -0.15, -0.07);
         glRotated(lower_leg, 1.0, 0.0, 0.0);
+        if (type){
+            glRotated(lLegLower1f, 1.0, 0.0, 0.0);
+        }
+        else glRotated(rLegLower1f, 1.0, 0.0, 0.0);
         glTranslated(0.0, 0.15, 0.07);
 
         glTranslated(0.0, -0.3, 0.0);

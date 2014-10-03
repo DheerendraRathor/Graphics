@@ -16,6 +16,7 @@ void draw_body() {
     glPushMatrix();
 
         //Torso
+        glRotated(main_rotation, 1.0, 0.0, 0.0);
         glRotated(torso3f, 0.0, 0.0, 1.0);
         glRotated(torso2f, 0.0, 1.0, 0.0);
         glRotated(torso1f, 1.0, 0.0, 0.0);

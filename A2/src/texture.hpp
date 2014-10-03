@@ -12,7 +12,7 @@ struct Image;
 
 extern unsigned int texture_torso[8];
 
-int ImageLoad(char *filename, Image *image);
+int ImageLoad(char*, Image*);
 void loadGLTextures();
 
 

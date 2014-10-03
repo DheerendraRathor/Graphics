@@ -7,6 +7,11 @@
 
 #include "transform.hpp"
 
+
+int body = 0;
+int body_rotated = 0;
+double main_rotation = 0.0;
+
 double upper_leg = 0.0;
 double lower_leg = 0.0;
 double leg_back = 0.0;

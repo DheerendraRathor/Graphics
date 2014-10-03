@@ -10,6 +10,10 @@
 #include <string>
 using namespace std;
 
+extern double main_rotation;
+extern int body_rotated;
+
+
 extern double upper_leg;
 extern double lower_leg;
 extern double leg_back;
@@ -33,6 +37,7 @@ extern int flaps_rotated;
 extern int legs;
 extern int arms;
 extern int flaps;
+extern int body;
 
 
 //Indivisual rotation

@@ -103,24 +103,21 @@ int main(int argc, char *argv[]) {
         //std::cerr<<csX75::key_pressed<<std::endl;
         switch (csX75::key_pressed) {
             case 257:
-                std::cerr<<"Transforming command executing..."<<std::endl;
-                legs = 1; arms = 1; flaps = 1;
+                legs = 1; arms = 1; flaps = 1; body = 1;
                 leg_rotated = (leg_rotated + 1) %2;
                 arm_rotated = (arm_rotated+1)% 2;
                 flaps_rotated = (flaps_rotated + 1)%2;
+                body_rotated = (body_rotated + 1) %2;
                 break;
             case 'L':
-                std::cerr<<'L'<<std::endl;
                 legs = 1;
                 leg_rotated = (leg_rotated + 1) %2;
                 break;
             case 'A':
-                std::cerr<<'A'<<std::endl;
                 arms = 1;
                 arm_rotated = (arm_rotated+1)% 2;
                 break;
             case 'F':
-                std::cerr<<'F'<<std::endl;
                 flaps = 1;
                 flaps_rotated = (flaps_rotated + 1)%2;
                 break;
@@ -247,6 +244,20 @@ int main(int argc, char *argv[]) {
         csX75::key_pressed = 0;
         //std::cerr<<legs<<std::endl;
         //std::cerr<<"upper_leg::"<<leg_back<<std::endl;
+
+        if (body && body_rotated){
+            if(main_rotation <= 180.0) main_rotation += 1.0;
+            if (main_rotation >= 180.0){
+                body = 0;
+            }
+        }
+        else if (body){
+            if (main_rotation > 0.0) main_rotation -= 1.0;
+            if (main_rotation <= 0.0){
+                body =0;
+            }
+        }
+
         if (legs && leg_rotated){
             if (upper_leg >= -180.0)upper_leg -= 1.0;
             if (lower_leg <= 180.0) lower_leg += 1.0;

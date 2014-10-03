@@ -41,42 +41,7 @@ int ImageLoad(char *filename, Image *image) {
     image->sizeX = 256;
     image->sizeY = 256;
 
-    // read the width
-    /*if ((i = fread(&image->sizeX, 4, 1, file)) != 1) {
-    printf("Error reading width from %s.\n", filename);
-    return 0;
-    }
-    printf("Width of %s: %lu\n", filename, image->sizeX);
-
-    // read the height
-    if ((i = fread(&image->sizeY, 4, 1, file)) != 1) {
-    printf("Error reading height from %s.\n", filename);
-    return 0;
-    }
-    printf("Height of %s: %lu\n", filename, image->sizeY);*/
-
-    // calculate the size (assuming 24 bits or 3 bytes per pixel).
     size = image->sizeX * image->sizeY * 3;
-
-    /*// read the planes
-    if ((fread(&planes, 2, 1, file)) != 1) {
-    printf("Error reading planes from %s.\n", filename);
-    return 0;
-    }
-    if (planes != 1) {
-    printf("Planes from %s is not 1: %u\n", filename, planes);
-    return 0;
-    }*/
-
-    // read the bpp
-   /* if ((i = fread(&bpp, 2, 1, file)) != 1) {
-    printf("Error reading bpp from %s.\n", filename);
-    return 0;
-    }
-    if (bpp != 24) {
-    printf("Bpp from %s is not 24: %u\n", filename, bpp);
-    return 0;
-    }*/
 
     // seek past the rest of the bitmap header.
     fseek(file, 24, SEEK_CUR);
@@ -115,7 +80,7 @@ void loadGLTextures() {
     Image *image8;
 
     // allocate space for texture
-   image1 = (Image *) malloc(sizeof(Image));
+    image1 = (Image *) malloc(sizeof(Image));
     image2 = (Image*) malloc(sizeof(Image));
     image3 = (Image*) malloc(sizeof(Image));
     image4 = (Image*) malloc(sizeof(Image));
@@ -124,29 +89,38 @@ void loadGLTextures() {
     image7 = (Image*) malloc(sizeof(Image));
     image8 = (Image*) malloc(sizeof(Image));
     if (
-            image1 == NULL ||
-            image2 == NULL ||
-            image3 == NULL ||
-            image4 == NULL ||
-            image5 == NULL ||
-            image6 == NULL ||
-            image7 == NULL ||
-            image8 == NULL
-        ) {
-    printf("Error allocating space for image");
-    exit(0);
+        image1 == NULL ||
+        image2 == NULL ||
+        image3 == NULL ||
+        image4 == NULL ||
+        image5 == NULL ||
+        image6 == NULL ||
+        image7 == NULL ||
+        image8 == NULL
+    ) {
+        printf("Error allocating space for image");
+        exit(0);
     }
 
+    char file1[] = "texture_image/torso1.bmp";
+    char file2[] = "texture_image/torso2.bmp";
+    char file3[] = "texture_image/torso3.bmp";
+    char file4[] = "texture_image/torso4.bmp";
+    char file5[] = "texture_image/torso5.bmp";
+    char file6[] = "texture_image/torso6.bmp";
+    char file7[] = "texture_image/torso7.bmp";
+    char file8[] = "texture_image/torso8.bmp";
+
     if (
-            !ImageLoad("texture_image/torso1.bmp", image1) ||
-             !ImageLoad("texture_image/torso2.bmp", image2) ||
-            !ImageLoad("texture_image/torso3.bmp", image3) ||
-            !ImageLoad("texture_image/torso4.bmp", image4) ||
-            !ImageLoad("texture_image/torso5.bmp", image5) ||
-            !ImageLoad("texture_image/torso6.bmp", image6) ||
-            !ImageLoad("texture_image/torso7.bmp", image7) ||
-            !ImageLoad("texture_image/torso8.bmp", image8)
-        ){
+        !ImageLoad(file1, image1) ||
+        !ImageLoad(file2, image2) ||
+        !ImageLoad(file3, image3) ||
+        !ImageLoad(file4, image4) ||
+        !ImageLoad(file5, image5) ||
+        !ImageLoad(file6, image6) ||
+        !ImageLoad(file7, image7) ||
+        !ImageLoad(file8, image8)
+    ){
         exit(1);
     }
 
