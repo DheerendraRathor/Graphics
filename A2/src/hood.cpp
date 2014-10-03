@@ -9,18 +9,20 @@
 #include "draw_rectangle.hpp"
 #include "transform.hpp"
 #include "hood.hpp"
+#include "display_list.hpp"
 
 void draw_hood(){
+    genDisplayList();
+    //Display List
+    /*GLuint side_flap = glGenLists(1);
+
+    glNewList(side_flap, GL_COMPILE);
+    draw_rectangle(0.2, 0.5);
+    glEndList();*/
     //Top Hood
     glPushMatrix();
         glTranslated(0.0, hood_pull, -0.101);
-
-        glBegin(GL_POLYGON);
-            glVertex3d(-0.2, -0.25, 0.0);
-            glVertex3d(0.2, -0.25, 0.0);
-            glVertex3d(0.06, 0.22, 0.0);
-            glVertex3d(-0.06, 0.22, 0.0);
-        glEnd();
+        glCallList(hood_list);
     glPopMatrix();
 
     //Side hood
@@ -30,7 +32,7 @@ void draw_hood(){
         glTranslated(-0.2, -0.5*flaps_pull, 0.0);
         glTranslated(0.1999, flaps_pull, 0.0);
         glRotated(90.0, 0.0, 1.0, 0.0);
-        draw_rectangle(0.2, 0.5);
+        glCallList(side_flap_list);
     glPopMatrix();
 
     //2nd side hood
@@ -40,7 +42,7 @@ void draw_hood(){
     glTranslated(0.2, -0.5*flaps_pull, 0.0);
     glTranslated(-0.1999, flaps_pull, 0.0);
     glRotated(90.0, 0.0, 1.0, 0.0);
-    draw_rectangle(0.2, 0.5);
+    glCallList(side_flap_list);
     glPopMatrix();
 }
 

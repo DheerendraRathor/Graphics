@@ -17,11 +17,11 @@ void draw_rectangle(double width, double height) {
     glEnd();
     glPushAttrib(GL_CURRENT_BIT);
         glColor4d(0.0,0.0,0.0,0.0);
-        glBegin(GL_LINE_LOOP);
+        /*glBegin(GL_LINE_LOOP);
             glVertex3d(hw1, hh1, 0.0);
             glVertex3d(hw2, hh1, 0.0);
             glVertex3d(hw2, hh2, 0.0);
             glVertex3d(hw1, hh2, 0.0);
-        glEnd();
+        glEnd();*/
     glPopAttrib();
 }

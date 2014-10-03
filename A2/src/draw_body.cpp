@@ -10,6 +10,7 @@ using namespace std;
 #include "arm.hpp"
 #include "transform.hpp"
 #include "hood.hpp"
+#include "display_list.hpp"
 
 
 void draw_body() {
@@ -21,7 +22,7 @@ void draw_body() {
         glRotated(torso1f, 1.0, 0.0, 0.0);
         glPushAttrib(GL_CURRENT_BIT);
             glColor4d(0.3, 0.1, 0.6, 0.1);
-            draw_cube(0.4, 0.2, 0.5);
+            glCallList(torso_list);
         glPopAttrib();
 
         draw_hood();

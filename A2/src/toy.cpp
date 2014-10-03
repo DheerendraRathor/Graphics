@@ -27,6 +27,7 @@
 
 #include "draw_body.hpp"
 #include "transform.hpp"
+#include "display_list.hpp"
 
 std::string filename, progname;
 bool file_flag = false;
@@ -46,16 +47,6 @@ void renderGL() {
     draw_body();
 }
 
-//Function to print the command line usage information
-void usage(void) {
-    std::cerr << "usage: " << progname << " [-f filename]" << std::endl
-            << std::endl;
-    std::cerr
-            << "\t-f\t filename of the file with the ToyLOGO source program\n";
-    std::cerr
-            << "\t\t If no filename is given then a default drawing is drawn.\n";
-    exit(0);
-}
 
 int main(int argc, char *argv[]) {
     progname = argv[0];
@@ -96,13 +87,25 @@ int main(int argc, char *argv[]) {
     //Initialize GL state
     csX75::initGL();
     glEnable(GL_DEPTH_TEST);
+    genDisplayList();
+    //std::cerr<<side_flap<<std::endl;
 
     // Loop until the user closes the window
     while (glfwWindowShouldClose(window) == 0) {
 
+
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         //std::cerr<<csX75::key_pressed<<std::endl;
         switch (csX75::key_pressed) {
+            case 257:
+                std::cerr<<"Transforming command executing..."<<std::endl;
+                legs = 1; arms = 1; flaps = 1;
+                leg_rotated = (leg_rotated + 1) %2;
+                arm_rotated = (arm_rotated+1)% 2;
+                flaps_rotated = (flaps_rotated + 1)%2;
+                break;
             case 'L':
                 std::cerr<<'L'<<std::endl;
                 legs = 1;
@@ -189,7 +192,7 @@ int main(int argc, char *argv[]) {
                 else if (selected == "lLeg") lLeg1f -= rotation;
                 else if (selected == "rLeg") rLeg1f -= rotation;
                 else if (selected == "lArmLower") lArmLower1f -= rotation;
-                else if (selected == "1ArmLower") rArmLower1f -= rotation;
+                else if (selected == "rArmLower") rArmLower1f -= rotation;
                 else if (selected == "lLegLower") lLegLower1f -= rotation;
                 else if (selected == "rLegLower") rLegLower1f -= rotation;
                 break;
@@ -201,10 +204,37 @@ int main(int argc, char *argv[]) {
                 else if (selected == "lLeg") lLeg1f += rotation;
                 else if (selected == "rLeg") rLeg1f += rotation;
                 else if (selected == "lArmLower") lArmLower1f += rotation;
-                else if (selected == "1ArmLower") rArmLower1f += rotation;
+                else if (selected == "rArmLower") rArmLower1f += rotation;
                 else if (selected == "lLegLower") lLegLower1f += rotation;
                 else if (selected == "rLegLower") rLegLower1f += rotation;
                 break;
+            case 'R':
+                rotation = 1.0;
+                torso1f = 0.0;
+                torso2f = 0.0;
+                torso3f = 0.0;
+                neck1f = 0.0;
+                neck2f = 0.0;
+                neck3f = 0.0;
+                lArm1f = 0.0;
+                lArm2f = 0.0;
+                lArm3f = 0.0;
+                rArm1f = 0.0;
+                rArm2f = 0.0;
+                rArm3f = 0.0;
+                lLeg1f = 0.0;
+                lLeg2f = 0.0;
+                lLeg3f = 0.0;
+                rLeg1f = 0.0;
+                rLeg2f = 0.0;
+                rLeg3f = 0.0;
+                lArmLower1f = 0.0;
+                rArmLower1f = 0.0;
+                lLegLower1f = 0.0;
+                rLegLower1f = 0.0;
+                selected = "";
+                break;
+
             default:
                 break;
         }

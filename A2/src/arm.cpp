@@ -11,6 +11,7 @@
 #include "draw_cube.hpp"
 #include "transform.hpp"
 #include "wheel.hpp"
+#include "display_list.hpp"
 
 void draw_arm(int type){
 
@@ -20,9 +21,20 @@ void draw_arm(int type){
     //Upper Arm rotation
         glTranslated(0.0, 0.15, 0.1);
         glRotated(upper_arm, 1.0, 0.0, 0.0);
-        glTranslated(0.0, -0.15, -0.1);
+        glTranslated(0.0, 0.0, -0.1);
+        if(type){
+            glRotated(lArm1f, 1.0, 0.0, 0.0);
+            glRotated(lArm2f, 0.0, 1.0, 0.0);
+            glRotated(lArm3f, 0.0, 0.0, 1.0);
+        }
+        else {
+            glRotated(rArm1f, 1.0, 0.0, 0.0);
+            glRotated(rArm2f, 0.0, 1.0, 0.0);
+            glRotated(rArm3f, 0.0, 0.0, 1.0);
+        }
+    glTranslated(0.0, -0.15, 0.0);
 
-    draw_cube(0.1,0.1,0.3);
+    glCallList(upper_arm_list);
     glPushMatrix();
 
     //lower arm adjustment
@@ -30,11 +42,15 @@ void draw_arm(int type){
     //Lower arm rotation
    glTranslated(0.0, -0.15, -0.07);
    glRotated(lower_arm, 1.0, 0.0, 0.0);
+   if (type){
+       glRotated(lArmLower1f, 1.0, 0.0, 0.0);
+   }
+   else glRotated(rArmLower1f, 1.0, 0.0, 0.0);
    glTranslated(0.0, 0.15, 0.07);
     glPushAttrib(GL_CURRENT_BIT);
         glTranslated(0.0, -0.3, 0.0);
         glColor3d(0.4, 0.1, 0.2);
-        draw_cube(0.1, 0.1, 0.3);
+        glCallList(lower_arm_list);
 
         if (type){
             glTranslated(-0.15, 0.0, 0.075);
@@ -44,7 +60,7 @@ void draw_arm(int type){
         }
         glRotated(90, 0.0, 1.0, 0.0);
         glColor3d(0.5, 0.5, 0.5);
-        draw_wheel(0.2);
+        glCallList(arm_wheel_list);
     glPopAttrib();
     glPopMatrix();
 }
