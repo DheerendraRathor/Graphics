@@ -8,7 +8,7 @@
 #ifndef WHEEL_HPP_
 #define WHEEL_HPP_
 
- void draw_wheel();
+ void draw_wheel(double);
 
 
 #endif /* WHEEL_HPP_ */

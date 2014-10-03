@@ -16,6 +16,9 @@ void draw_body() {
     glPushMatrix();
 
         //Torso
+        glRotated(torso3f, 0.0, 0.0, 1.0);
+        glRotated(torso2f, 0.0, 1.0, 0.0);
+        glRotated(torso1f, 1.0, 0.0, 0.0);
         glPushAttrib(GL_CURRENT_BIT);
             glColor4d(0.3, 0.1, 0.6, 0.1);
             draw_cube(0.4, 0.2, 0.5);
@@ -25,6 +28,9 @@ void draw_body() {
         //Adding head
         glPushMatrix();
             glTranslated(0.0, 0.31, 0.0);
+            glRotated(neck3f, 0.0, 0.0, 1.0);
+            glRotated(neck2f, 0.0, 1.0, 0.0);
+            glRotated(neck1f, 1.0, 0.0, 0.0);
             draw_head();
         glPopMatrix();
 

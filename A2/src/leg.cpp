@@ -45,7 +45,7 @@ void draw_leg(int type){
                 }
                 glRotated(90, 0.0, 1.0, 0.0);
                 glColor3d(0.5, 0.5, 0.5);
-                draw_wheel();
+                draw_wheel(0.1);
             glPopMatrix();
         glPopAttrib();
         //foot

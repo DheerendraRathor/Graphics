@@ -24,6 +24,7 @@ namespace csX75 {
 int win_width;
 int win_height;
 extern int key_pressed;
+int which_key_pressed;
 
 //! Initialize GL State
 void initGL(void) {
@@ -67,7 +68,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action,
         int mods) {
 
-    key_pressed = key;
+    which_key_pressed = (which_key_pressed+1)%2;
+    if (which_key_pressed) key_pressed = key;
     //!Close the window if the ESC key was pressed
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);

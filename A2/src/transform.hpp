@@ -7,7 +7,8 @@
 
 #ifndef TRANSFORM_HPP_
 #define TRANSFORM_HPP_
-
+#include <string>
+using namespace std;
 
 extern double upper_leg;
 extern double lower_leg;
@@ -32,5 +33,38 @@ extern int flaps_rotated;
 extern int legs;
 extern int arms;
 extern int flaps;
+
+
+//Indivisual rotation
+extern double rotation;
+extern string selected;
+extern double lLeg1f;
+extern double lLeg2f;
+extern double lLeg3f;
+extern double lLegLower1f;
+
+extern double rLeg1f;
+extern double rLeg2f;
+extern double rLeg3f;
+extern double rLegLower1f;
+
+extern double rArm1f;
+extern double rArm2f;
+extern double rArm3f;
+extern double rArmLower1f;
+
+extern double lArm1f;
+extern double lArm2f;
+extern double lArm3f;
+extern double lArmLower1f;
+
+extern double torso1f;
+extern double torso2f;
+extern double torso3f;
+
+extern double neck1f;
+extern double neck2f;
+extern double neck3f;
+
 
 #endif /* TRANSFORM_HPP_ */

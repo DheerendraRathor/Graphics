@@ -42,7 +42,7 @@ double rotate = 1.0;
 
 //GLFW display callback
 void renderGL() {
-   glRotated(rotate, 1.0, 1.0, 1.0);
+   //glRotated(rotate, 1.0, 1.0, 1.0);
     draw_body();
 }
 
@@ -101,31 +101,139 @@ int main(int argc, char *argv[]) {
     while (glfwWindowShouldClose(window) == 0) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //std::cerr<<csX75::key_pressed<<std::endl;
         switch (csX75::key_pressed) {
             case 'L':
-                legs = 1; csX75::key_pressed = 0;
+                std::cerr<<'L'<<std::endl;
+                legs = 1;
+                leg_rotated = (leg_rotated + 1) %2;
                 break;
             case 'A':
-                arms = 1; csX75::key_pressed = 0;
+                std::cerr<<'A'<<std::endl;
+                arms = 1;
+                arm_rotated = (arm_rotated+1)% 2;
                 break;
             case 'F':
-                flaps = 1; csX75::key_pressed = 0;
+                std::cerr<<'F'<<std::endl;
+                flaps = 1;
+                flaps_rotated = (flaps_rotated + 1)%2;
+                break;
+            case 'T':
+                selected = "torso";
+                break;
+            case 'N':
+                selected = "neck";
+                break;
+            case 'Q':
+                selected = "lArm";
+                break;
+            case 'Z':
+                selected = "rArm";
+                break;
+            case 'W':
+                selected = "lArmLower";
+                break;
+            case 'X':
+                selected = "rArmLower";
+                break;
+            case 'I':
+                selected = "lLeg";
+                break;
+            case 'M':
+                selected = "rLeg";
+                break;
+            case 'U':
+                selected = "lLegLower";
+                break;
+            case 'Y':
+                selected = "rLegLower";
+                break;
+            case 44:
+                if (selected == "torso") torso3f += rotation;
+                else if (selected == "neck") neck3f += rotation;
+                else if (selected == "lArm") lArm3f += rotation;
+                else if (selected == "rArm") rArm3f += rotation;
+                else if (selected == "lLeg") lLeg3f += rotation;
+                else if (selected == "rLeg") rLeg3f += rotation;
+
+                break;
+            case 46:
+                if (selected == "torso") torso3f -= rotation;
+                else if (selected == "neck") neck3f -= rotation;
+                else if (selected == "lArm") lArm3f -= rotation;
+                else if (selected == "rArm") rArm3f -= rotation;
+                else if (selected == "lLeg") lLeg3f -= rotation;
+                else if (selected == "rLeg") rLeg3f -= rotation;
+                break;
+            case 263:
+                if (selected == "torso") torso2f -= rotation;
+                else if (selected == "neck") neck2f -= rotation;
+                else if (selected == "lArm") lArm2f -= rotation;
+                else if (selected == "rArm") rArm2f -= rotation;
+                else if (selected == "lLeg") lLeg2f -= rotation;
+                else if (selected == "rLeg") rLeg2f -= rotation;
+                break;
+            case 262:
+                if (selected == "torso") torso2f += rotation;
+                else if (selected == "neck") neck2f += rotation;
+                else if (selected == "lArm") lArm2f += rotation;
+                else if (selected == "rArm") rArm2f += rotation;
+                else if (selected == "lLeg") lLeg2f += rotation;
+                else if (selected == "rLeg") rLeg2f += rotation;
+                break;
+            case 264:
+                if (selected == "torso") torso1f -= rotation;
+                else if (selected == "neck") neck1f -= rotation;
+                else if (selected == "lArm") lArm1f -= rotation;
+                else if (selected == "rArm") rArm1f -= rotation;
+                else if (selected == "lLeg") lLeg1f -= rotation;
+                else if (selected == "rLeg") rLeg1f -= rotation;
+                else if (selected == "lArmLower") lArmLower1f -= rotation;
+                else if (selected == "1ArmLower") rArmLower1f -= rotation;
+                else if (selected == "lLegLower") lLegLower1f -= rotation;
+                else if (selected == "rLegLower") rLegLower1f -= rotation;
+                break;
+            case 265:
+                if (selected == "torso") torso1f += rotation;
+                else if (selected == "neck") neck1f += rotation;
+                else if (selected == "lArm") lArm1f += rotation;
+                else if (selected == "rArm") rArm1f += rotation;
+                else if (selected == "lLeg") lLeg1f += rotation;
+                else if (selected == "rLeg") rLeg1f += rotation;
+                else if (selected == "lArmLower") lArmLower1f += rotation;
+                else if (selected == "1ArmLower") rArmLower1f += rotation;
+                else if (selected == "lLegLower") lLegLower1f += rotation;
+                else if (selected == "rLegLower") rLegLower1f += rotation;
                 break;
             default:
                 break;
         }
-
-        if (legs && !leg_rotated){
+        if (csX75::key_pressed - 48 < 10 && (csX75::key_pressed - 48 >0)){
+            rotation = csX75::key_pressed - 48;
+        }
+        csX75::key_pressed = 0;
+        //std::cerr<<legs<<std::endl;
+        //std::cerr<<"upper_leg::"<<leg_back<<std::endl;
+        if (legs && leg_rotated){
             if (upper_leg >= -180.0)upper_leg -= 1.0;
             if (lower_leg <= 180.0) lower_leg += 1.0;
             if (leg_back >= -0.2 && upper_leg <= -180.0) leg_back -=0.001;
             if (leg_back <= -0.2){
-                leg_rotated = 1;
                 legs = 0;
             }
         }
 
-        if (arms && !arm_rotated){
+        else if (legs){
+            if (upper_leg < 0.0 && leg_back >= 0.0)upper_leg += 1.0;
+            if (lower_leg > 0.0 && leg_back >= 0.0) lower_leg -= 1.0;
+            if (leg_back < 0.0) leg_back +=0.001;
+            if (upper_leg >= 0.0){
+                legs = 0;
+            }
+        }
+
+        //Arms animation to car
+        if (arms && arm_rotated){
             if (arm_close <= 0.05) arm_close += 0.001;
             if (arm_back <= 0.05) arm_back += 0.001;
             if (lower_arm_back <= 0.03) lower_arm_back += 0.001;
@@ -133,12 +241,24 @@ int main(int argc, char *argv[]) {
             if (lower_arm <= 180.0) lower_arm += 1.0;
             if (arm_front >= -0.2 && upper_arm <= -180.0) arm_front -=0.001;
             if (arm_front <= -0.2){
-                arm_rotated = 1;
                 arms = 0;
             }
          }
 
-        if (flaps && !flaps_rotated){
+        //Arms animation to autobot
+        else if (arms){
+            if (arm_close > 0.0 && arm_front >= 0.0) arm_close -= 0.001;
+            if (arm_back > 0.0 && arm_front >= 0.0) arm_back -= 0.001;
+            if (lower_arm_back > 0.0 && arm_front >= 0.0) lower_arm_back -= 0.001;
+            if (upper_arm < 0.0 && arm_front >= 0.0)upper_arm += 1.0;
+            if (lower_arm > 0.0 && arm_front >= 0.0) lower_arm -= 1.0;
+            if (arm_front < 0.0) arm_front +=0.001;
+            if (upper_arm >= 0.0){
+                arms = 0;
+            }
+        }
+
+        if (flaps && flaps_rotated){
             if (flaps_pull <= 0.45) flaps_pull += 0.05;
             if (hood_pull <= 0.45) hood_pull += 0.05;
             if (flaps_pull >= 0.45){
@@ -146,15 +266,16 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        else if(flaps){
+            if (flaps_pull > 0.0 && flaps_rotate <= 0.0) flaps_pull -= 0.05;
+            if (hood_pull > 0.0 && flaps_rotate <= 0.0) hood_pull -= 0.05;
+            if (flaps_pull >= 0.45){
+                if(flaps_rotate > 0.0) flaps_rotate-= 1.0;
+            }
+        }
+
         // Render here
         renderGL();
-        //GLUquadricObj* quad_t = gluNewQuadric();
-
-        /*glRotated(0.1, 1.0, 0.0,0.0);
-        glColor3d(0.1, 0.2, 0.3);
-        gluCylinder(quad_t, 0.5, 0.5, 0.2, 100, 100);
-        glColor3d(0.2, 0.3, 0.4);
-        gluDisk(quad_t, 0.0, 0.5, 100, 100);*/
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
