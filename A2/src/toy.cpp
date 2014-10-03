@@ -89,8 +89,12 @@ int main(int argc, char *argv[]) {
     csX75::initGL();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
-    genDisplayList();
+
+    //Loading Textures
     loadGLTextures();
+
+    //Calling display list
+    genDisplayList();
     //std::cerr<<side_flap<<std::endl;
 
     // Loop until the user closes the window
