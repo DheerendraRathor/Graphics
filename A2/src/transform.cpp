@@ -75,3 +75,9 @@ double touching_ground = 0;
 int camera_setup = 1;
 double turned = 0.0;
 int speed = 0;
+
+int l0_enable = 1;
+int l1_enable = 1;
+int headlight = 0;
+int turn_command = 0;
+double top_cam = 10.0;

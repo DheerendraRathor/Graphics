@@ -51,15 +51,15 @@ double z = 0.0;
 //GLFW display callback
 void renderGL() {
 
-    /*GLfloat light_pos[] = {0.0, 1.0, 0.0, 1.0};
-    GLfloat light_dir[] = {0.0, -1.0, 0.0};
+    GLfloat light_pos[] = {car_x + 0.155*sin(turned*PI/180), -1.05f, car_z - 0.155*cos(turned*PI/180),1.0f};
+    GLfloat light_dir[] = {car_x + 2*sin(turned*PI/180), -1.7f, car_z - 2*cos(turned*PI/180)};
     GLfloat diffuse_light[] = {0.7f, 0.7f, 0.7f, 1.0f};
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_dir);
-    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 40.0);
-    glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 100.0f);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
-*/
+    glLightfv(GL_LIGHT2, GL_POSITION, light_pos);
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, light_dir);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 40.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 100.0f);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse_light);
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();               // Reset The Projection Matrix
 
@@ -77,8 +77,8 @@ void renderGL() {
         break;
     case 1:
         gluLookAt(
-                car_x-5, 20.0f, car_z-5,
-                car_x, 5.0f, car_z,
+                car_x, top_cam, car_z,
+                car_x, 0.0f, car_z,
                 1.0f, 10.0f, 0.0f
         );
         break;
@@ -156,23 +156,37 @@ int main(int argc, char *argv[]) {
 
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
 
-    float light_position[] = { 10, 10,0, 10.0f , 1.0f};
-    float light_ambient[] = {1.0f, 1.0f, 1.0f, 1.0f };
-    float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float light0_position[] = { 10, 10.0, 10.0f , 1.0f};
+    float light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-    float mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-    float mat_diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
-   // glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    float light1_position[] = { 10, 10.0, 10.0f , 1.0f};
+    float light1_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+    glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+
+    /*GLfloat LightAmbient1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    GLfloat LightDiffuse1[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GLfloat position1[] =  {0.05, 0.075, 0.08, 1.0}; //Add pos_x to x coordinate and pos_z to z coordinate
+    GLfloat spotDir1[] = {0.0, 0.0, -1.0};   //Rotate wrt rotate_y
+    glLightfv(GL_LIGHT2, GL_AMBIENT, LightAmbient1);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, LightDiffuse1);
+    glLightfv(GL_LIGHT2, GL_POSITION, position1);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 10.0);
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spotDir1);
+    glEnable(GL_LIGHT2);*/
 
 
-    //glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
+    //Pre car formation
+    legs = 1; arms = 1; flaps = 1; body = 1;
+    leg_rotated = (leg_rotated + 1) %2;
+    arm_rotated = (arm_rotated+1)% 2;
+    flaps_rotated = (flaps_rotated + 1)%2;
+    body_rotated = (body_rotated + 1) %2;
 
 
     //Loading Textures
@@ -211,11 +225,32 @@ int main(int argc, char *argv[]) {
                 if (speed) {
                     turned = turned - 1;
                 }
+                if (leg_wheel_turn < 30){
+                    leg_wheel_turn += 10;
+                }
                 break;
             case 262:
                 if (speed) {
                     turned = turned + 1;
                 }
+                if (leg_wheel_turn > -30){
+                    leg_wheel_turn -= 10;
+                }
+                break;
+            case 'Q':
+                l0_enable = (l0_enable + 1) % 2;
+                break;
+            case 'W':
+                l1_enable = (l1_enable + 1) % 2;
+                break;
+            case 'M':
+                if(camera_setup == 1)top_cam += 2;
+                break;
+            case 'N':
+                if(camera_setup == 1)top_cam -= 2;
+                break;
+            case 'H':
+                headlight = (headlight + 1) % 2;
                 break;
             default:
                 break;
@@ -341,6 +376,28 @@ int main(int argc, char *argv[]) {
             }
 
         }
+        if (leg_wheel_turn != 0){
+            if (leg_wheel_turn > 0){
+                leg_wheel_turn -= 0.5;
+            }
+            else leg_wheel_turn += 0.5;
+        }
+
+        if (l0_enable){
+            glEnable(GL_LIGHT0);
+        }
+        else glDisable(GL_LIGHT0);
+
+        if (l1_enable){
+            glEnable(GL_LIGHT1);
+        }
+        else glDisable(GL_LIGHT1);
+
+        if (headlight){
+            glEnable(GL_LIGHT2);
+        }
+        else glDisable(GL_LIGHT2);
+
         // Render here
         renderGL();
 

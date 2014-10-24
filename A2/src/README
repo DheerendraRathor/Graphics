@@ -10,28 +10,16 @@ a. use ./toyTransformer to run the executable file
 b. press ESC or x button on window to quit
 c. Key Bindings:
     ENTER: transform into vehicle from autobot and vice versa.
-    A: transform only arms into vehicular arms from autobot and vice versa.
-    L: transform only legs into vehicular legs from autobot and vice versa.
-    F: transform flaps and hood back and forth
-    T: select torso
-    N: Select Neck
-    Q: Select Left Arm
-    Z: select Right Arm
-    W: select left lower arm
-    X: select right lower arm
-    I: select left leg
-    M: select right leg
-    U: select left lower leg
-    Y: select right lower leg
-    <: Rotate selected element about z axis clockwise 
-    >: rotate selected element about z axis anticlockwise
-    Up Arrow: Rotate selected element about x axis upward
-    Down Arrow: Rotate selected element about x axis downwards
-    Left Arrow: Rotate selected element about y axis forward rotation
-    Right arrow : Rotate selecte element about y axis backward rotation.
-    
-    R: reset every rotation about selected elements to there original (before starting rotation stage)
-    Num keys (1-9) on main keyboard: select rotation speed (selected integer degree per command)
+    'C': toggle between various camera mode
+    'N': zoom out when top camera is enabled
+    'M': zoom in when top camera in enabled
+    'Q': Toggle Directional Light 0 on and off
+    'W': Toggle Directional Light 1 on and off
+    'H': Toggle headlight
+    'Up Arrow': accelerate car
+    'Down Arrow': retard car
+    'Left Arrow': turn car to left
+    'Right Arrow': turn car to right
 4.
 This code uses OpenGL 2.1.
 

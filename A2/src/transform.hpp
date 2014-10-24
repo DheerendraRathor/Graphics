@@ -72,10 +72,17 @@ extern double neck2f;
 extern double neck3f;
 
 //Car movement
+extern double leg_wheel_turn;
 extern double car_z;
 extern double car_x;
 extern double touching_ground;
 extern int camera_setup;
 extern double turned;
 extern int speed;
+
+extern int l0_enable;
+extern int l1_enable;
+extern int headlight;
+extern int turn_command;
+extern double top_cam;
 #endif /* TRANSFORM_HPP_ */

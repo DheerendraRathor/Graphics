@@ -75,7 +75,6 @@ void draw_env(){
 
     glPushMatrix();
     glTranslated(0.0, 25.0, -500.0f);
-
     draw_rectangle(1000, 52);
     glPopMatrix();
 

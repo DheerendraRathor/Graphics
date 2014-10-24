@@ -10,6 +10,7 @@
 #include "leg.hpp"
 #include "transform.hpp"
 #include "display_list.hpp"
+#include "draw_rectangle.hpp"
 
 void draw_leg(int type){
 
@@ -50,12 +51,19 @@ void draw_leg(int type){
 
             glPushMatrix();
                 if (type){
-                    glTranslated(-0.15, 0.0, 0.075);
+                    glTranslated(-0.2, 0.0, 0.075);
+                    draw_rectangle(0.3, 0.02);
+                    glTranslated(-0.15, 0.0, 0.0);
                 }
                 else {
-                    glTranslated(0.05, 0.0, 0.075);
+                    glTranslated(0.15, 0.0, 0.075);
+                    draw_rectangle(0.3, 0.02);
+                    glTranslated(0.1, 0.0, 0.0);
                 }
                 glRotated(90, 0.0, 1.0, 0.0);
+                glTranslated(0.0, 0.0, 0.05);
+                glRotated(leg_wheel_turn, 1.0, 0.0, 0.0);
+                glTranslated(0.0, 0.0, -0.05);
                 glColor3d(0.5, 0.5, 0.5);
                 glCallList(leg_wheel_list);
             glPopMatrix();
