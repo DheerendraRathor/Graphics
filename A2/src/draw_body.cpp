@@ -16,12 +16,14 @@ void draw_body() {
     glPushMatrix();
 
         //Torso
+        glTranslated(car_x, touching_ground, car_z);
         glRotated(main_rotation, 1.0, 0.0, 0.0);
         glRotated(torso3f, 0.0, 0.0, 1.0);
         glRotated(torso2f, 0.0, 1.0, 0.0);
         glRotated(torso1f, 1.0, 0.0, 0.0);
         glPushAttrib(GL_CURRENT_BIT);
            // glColor4d(0.3, 0.1, 0.6, 0.1);
+        glRotated(turned, 0.0, 0.0, 1.0);
             glCallList(torso_list);
         glPopAttrib();
 

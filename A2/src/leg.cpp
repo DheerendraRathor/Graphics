@@ -64,6 +64,8 @@ void draw_leg(int type){
         glPushMatrix();
             glRotated(lower_leg, 0.0, 1.0, 0.0);
             glTranslated(0.0, -0.15, 0.05);
+            GLfloat pos[] = {0.0, 0.0, 0.0, 1.0};
+            //glLightfv(GL_LIGHT1, GL_POSITION, pos);
             glCallList(feet_list);
         glPopMatrix();
     glPopMatrix();

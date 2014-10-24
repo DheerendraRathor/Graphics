@@ -71,5 +71,11 @@ extern double neck1f;
 extern double neck2f;
 extern double neck3f;
 
-
+//Car movement
+extern double car_z;
+extern double car_x;
+extern double touching_ground;
+extern int camera_setup;
+extern double turned;
+extern int speed;
 #endif /* TRANSFORM_HPP_ */

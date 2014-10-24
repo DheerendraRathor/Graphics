@@ -22,13 +22,18 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
+#include <cmath>
 
 #include "gl_framework.hpp"
 
+#include "draw_cube.hpp"
 #include "draw_body.hpp"
 #include "transform.hpp"
 #include "display_list.hpp"
 #include "texture.hpp"
+#include "draw_env.hpp"
+
+#define PI 3.14159265
 
 std::string filename, progname;
 bool file_flag = false;
@@ -37,15 +42,69 @@ namespace csX75{
 int key_pressed;
 }
 
-double color[24] = { 0.4, 0.6, 0.1, 1.0, 0.6, 0.1, 0.6, 1.0, 0.7, 0.8, 0.1, 1.0,
-        0.8, 0.1, 0.5, 1.0, 0.8, 0.5, 1.0, 1.0, 0.7, 0.1, 0.6, 1.0 };
 
 double rotate = 1.0;
+double angle = 0.0;
+double x = 0.0;
+double z = 0.0;
 
 //GLFW display callback
 void renderGL() {
-   //glRotated(rotate, 1.0, 1.0, 1.0);
+
+    /*GLfloat light_pos[] = {0.0, 1.0, 0.0, 1.0};
+    GLfloat light_dir[] = {0.0, -1.0, 0.0};
+    GLfloat diffuse_light[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_dir);
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 40.0);
+    glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 100.0f);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
+*/
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();               // Reset The Projection Matrix
+
+    gluPerspective(50,1, 0.1, 1000);
+    glMatrixMode(GL_MODELVIEW);
+
+    glLoadIdentity();
+    switch(camera_setup){
+    case 0:
+        gluLookAt(
+                    100.0f, 0.0f, 100.0f,
+                    0.0f, 0.0f, 0.0f,
+                    0.0f, 1.0f, 0.0f
+            );
+        break;
+    case 1:
+        gluLookAt(
+                car_x-5, 20.0f, car_z-5,
+                car_x, 5.0f, car_z,
+                1.0f, 10.0f, 0.0f
+        );
+        break;
+    case 2:
+        gluLookAt(
+                car_x - 4*sin(turned*PI/180), 0.0f, car_z + 4*cos(turned*PI/180),
+                car_x + sin(turned*PI/180), 0.0f, car_z - cos(turned*PI/180),
+                0.0f, 1.0f, 0.0f
+        );
+        break;
+    case 3:
+        gluLookAt(
+                car_x + 0.155*sin(turned*PI/180), -1.05f, car_z - 0.155*cos(turned*PI/180),
+                car_x + 2*sin(turned*PI/180), -1.2f, car_z - 2*cos(turned*PI/180),
+                0.0f, 1.0f, 0.0f
+        );
+    break;
+    }
+
+
+    draw_env();
+
     draw_body();
+    rotate++;
+
+
 }
 
 
@@ -89,6 +148,32 @@ int main(int argc, char *argv[]) {
     csX75::initGL();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glShadeModel(GL_SMOOTH);
+    GLfloat  ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+
+    float light_position[] = { 10, 10,0, 10.0f , 1.0f};
+    float light_ambient[] = {1.0f, 1.0f, 1.0f, 1.0f };
+    float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    float mat_ambient[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float mat_diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+   // glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+
+    //glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128);
+
 
     //Loading Textures
     loadGLTextures();
@@ -104,7 +189,7 @@ int main(int argc, char *argv[]) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //std::cerr<<csX75::key_pressed<<std::endl;
+
         switch (csX75::key_pressed) {
             case 257:
                 legs = 1; arms = 1; flaps = 1; body = 1;
@@ -113,132 +198,25 @@ int main(int argc, char *argv[]) {
                 flaps_rotated = (flaps_rotated + 1)%2;
                 body_rotated = (body_rotated + 1) %2;
                 break;
-            case 'L':
-                legs = 1;
-                leg_rotated = (leg_rotated + 1) %2;
-                break;
-            case 'A':
-                arms = 1;
-                arm_rotated = (arm_rotated+1)% 2;
-                break;
-            case 'F':
-                flaps = 1;
-                flaps_rotated = (flaps_rotated + 1)%2;
-                break;
-            case 'T':
-                selected = "torso";
-                break;
-            case 'N':
-                selected = "neck";
-                break;
-            case 'Q':
-                selected = "lArm";
-                break;
-            case 'Z':
-                selected = "rArm";
-                break;
-            case 'W':
-                selected = "lArmLower";
-                break;
-            case 'X':
-                selected = "rArmLower";
-                break;
-            case 'I':
-                selected = "lLeg";
-                break;
-            case 'M':
-                selected = "rLeg";
-                break;
-            case 'U':
-                selected = "lLegLower";
-                break;
-            case 'Y':
-                selected = "rLegLower";
-                break;
-            case 44:
-                if (selected == "torso") torso3f += rotation;
-                else if (selected == "neck") neck3f += rotation;
-                else if (selected == "lArm") lArm3f += rotation;
-                else if (selected == "rArm") rArm3f += rotation;
-                else if (selected == "lLeg") lLeg3f += rotation;
-                else if (selected == "rLeg") rLeg3f += rotation;
-
-                break;
-            case 46:
-                if (selected == "torso") torso3f -= rotation;
-                else if (selected == "neck") neck3f -= rotation;
-                else if (selected == "lArm") lArm3f -= rotation;
-                else if (selected == "rArm") rArm3f -= rotation;
-                else if (selected == "lLeg") lLeg3f -= rotation;
-                else if (selected == "rLeg") rLeg3f -= rotation;
-                break;
-            case 263:
-                if (selected == "torso") torso2f -= rotation;
-                else if (selected == "neck") neck2f -= rotation;
-                else if (selected == "lArm") lArm2f -= rotation;
-                else if (selected == "rArm") rArm2f -= rotation;
-                else if (selected == "lLeg") lLeg2f -= rotation;
-                else if (selected == "rLeg") rLeg2f -= rotation;
-                break;
-            case 262:
-                if (selected == "torso") torso2f += rotation;
-                else if (selected == "neck") neck2f += rotation;
-                else if (selected == "lArm") lArm2f += rotation;
-                else if (selected == "rArm") rArm2f += rotation;
-                else if (selected == "lLeg") lLeg2f += rotation;
-                else if (selected == "rLeg") rLeg2f += rotation;
+            case 265:
+                if (speed < 2000) speed += 200;
                 break;
             case 264:
-                if (selected == "torso") torso1f -= rotation;
-                else if (selected == "neck") neck1f -= rotation;
-                else if (selected == "lArm") lArm1f -= rotation;
-                else if (selected == "rArm") rArm1f -= rotation;
-                else if (selected == "lLeg") lLeg1f -= rotation;
-                else if (selected == "rLeg") rLeg1f -= rotation;
-                else if (selected == "lArmLower") lArmLower1f -= rotation;
-                else if (selected == "rArmLower") rArmLower1f -= rotation;
-                else if (selected == "lLegLower") lLegLower1f -= rotation;
-                else if (selected == "rLegLower") rLegLower1f -= rotation;
+                if (speed > -500) speed -= 200;
                 break;
-            case 265:
-                if (selected == "torso") torso1f += rotation;
-                else if (selected == "neck") neck1f += rotation;
-                else if (selected == "lArm") lArm1f += rotation;
-                else if (selected == "rArm") rArm1f += rotation;
-                else if (selected == "lLeg") lLeg1f += rotation;
-                else if (selected == "rLeg") rLeg1f += rotation;
-                else if (selected == "lArmLower") lArmLower1f += rotation;
-                else if (selected == "rArmLower") rArmLower1f += rotation;
-                else if (selected == "lLegLower") lLegLower1f += rotation;
-                else if (selected == "rLegLower") rLegLower1f += rotation;
+            case 'C':
+                camera_setup = (camera_setup + 1) % 4;
                 break;
-            case 'R':
-                rotation = 1.0;
-                torso1f = 0.0;
-                torso2f = 0.0;
-                torso3f = 0.0;
-                neck1f = 0.0;
-                neck2f = 0.0;
-                neck3f = 0.0;
-                lArm1f = 0.0;
-                lArm2f = 0.0;
-                lArm3f = 0.0;
-                rArm1f = 0.0;
-                rArm2f = 0.0;
-                rArm3f = 0.0;
-                lLeg1f = 0.0;
-                lLeg2f = 0.0;
-                lLeg3f = 0.0;
-                rLeg1f = 0.0;
-                rLeg2f = 0.0;
-                rLeg3f = 0.0;
-                lArmLower1f = 0.0;
-                rArmLower1f = 0.0;
-                lLegLower1f = 0.0;
-                rLegLower1f = 0.0;
-                selected = "";
+            case 263:
+                if (speed) {
+                    turned = turned - 1;
+                }
                 break;
-
+            case 262:
+                if (speed) {
+                    turned = turned + 1;
+                }
+                break;
             default:
                 break;
         }
@@ -250,15 +228,31 @@ int main(int argc, char *argv[]) {
         //std::cerr<<"upper_leg::"<<leg_back<<std::endl;
 
         if (body && body_rotated){
-            if(main_rotation <= 180.0) main_rotation += 1.0;
-            if (main_rotation >= 180.0){
+            if(main_rotation <= 90.0) {
+                main_rotation += 1.0;
+                if (touching_ground > -1.0){
+                    touching_ground -= 0.01;
+                }
+            }
+            if (main_rotation >= 90.0){
                 body = 0;
+                while (touching_ground >-1.0){
+                    touching_ground -= 0.01;
+                }
             }
         }
         else if (body){
-            if (main_rotation > 0.0) main_rotation -= 1.0;
+            if (main_rotation > 0.0) {
+                main_rotation -= 1.0;
+                if (touching_ground < 0.0){
+                    touching_ground += 0.01;
+                }
+            }
             if (main_rotation <= 0.0){
                 body =0;
+                while (touching_ground <= 0.0){
+                    touching_ground+= 0.01;
+                }
             }
         }
 
@@ -322,6 +316,31 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        //car running
+        if (speed!=0){
+            if (car_z <= 98 && car_z >= -98 && car_x <= 98 && car_x >= -98){
+             car_z = car_z - speed*cos(turned*PI/180)/10000;
+             car_x = car_x + speed*sin(turned* PI/180)/10000;
+            }
+            else {
+                if (car_z < 0) car_z += 3;
+                if (car_z > 0) car_z -= 3;
+                if (car_x < 0) car_x += 3;
+                if (car_x > 0) car_x -= 3;
+                speed = 0;
+
+            }
+
+            if (speed > 0){
+                speed = speed -5;
+            }
+
+            if (speed < 0)
+            {
+                speed  = speed + 5;
+            }
+
+        }
         // Render here
         renderGL();
 

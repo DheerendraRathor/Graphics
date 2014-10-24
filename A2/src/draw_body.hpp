@@ -1,5 +1,5 @@
-#ifndef _CUBE_HPP_
-#define _CUBE_HPP_
+#ifndef _BODY_HPP_
+#define _BODY_HPP_
 
 void draw_body();
 

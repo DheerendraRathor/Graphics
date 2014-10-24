@@ -66,3 +66,12 @@ double torso3f = 0.0;
 double neck1f = 0.0;
 double neck2f = 0.0;
 double neck3f = 0.0;
+
+double leg_wheel_turn = 0.0;
+
+double car_z = 0;
+double car_x = 0;
+double touching_ground = 0;
+int camera_setup = 1;
+double turned = 0.0;
+int speed = 0;

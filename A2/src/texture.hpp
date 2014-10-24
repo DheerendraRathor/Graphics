@@ -10,9 +10,9 @@
 
 struct Image;
 
-extern unsigned int texture_torso[8];
+extern unsigned int texture[100];
+extern int texture_count;
 
-int ImageLoad(char*, Image*);
 void loadGLTextures();
 
 

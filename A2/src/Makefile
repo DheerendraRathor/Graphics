@@ -2,7 +2,8 @@ OPENGLLIB= -lGL
 GLEWLIB= -lGLEW
 GLFWLIB = -lglfw
 GLU = -lGLU
-LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB) $(GLU)
+SOIL = -lSOIL
+LIBS=$(OPENGLLIB) $(GLEWLIB) $(GLFWLIB) $(GLU) $(SOIL)
 LDFLAGS=-L/usr/local/lib 
 CPPFLAGS=-I/usr/local/include
 
