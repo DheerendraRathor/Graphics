@@ -28,8 +28,7 @@ http://www.cse.iitb.ac.in/~dheerendra/graphics/a2/
 
 6.
 Sources used:
-Texture mapping help is taken from 
-http://nehe.gamedev.net/tutorial/texture_mapping/12038/
+Texture mapping is done with SOIL library http://www.lonesock.net/soil.html
 Image courtesy: Google Images
 
 7. 

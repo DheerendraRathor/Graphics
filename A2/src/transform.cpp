@@ -81,3 +81,5 @@ int l1_enable = 1;
 int headlight = 0;
 int turn_command = 0;
 double top_cam = 10.0;
+
+double sunlight = 0.3;

@@ -51,13 +51,13 @@ double z = 0.0;
 //GLFW display callback
 void renderGL() {
 
-    GLfloat light_pos[] = {car_x + 0.155*sin(turned*PI/180), -1.05f, car_z - 0.155*cos(turned*PI/180),1.0f};
-    GLfloat light_dir[] = {car_x + 2*sin(turned*PI/180), -1.7f, car_z - 2*cos(turned*PI/180)};
+    GLfloat light_pos[] = {car_x + 0.3*sin(turned*PI/180), -1.05f, car_z - 0.3*cos(turned*PI/180),1.0f};
+    GLfloat light_dir[] = {car_x + 2*sin(turned*PI/180), -1.1f, car_z - 2*cos(turned*PI/180)};
     GLfloat diffuse_light[] = {0.7f, 0.7f, 0.7f, 1.0f};
     glLightfv(GL_LIGHT2, GL_POSITION, light_pos);
     glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, light_dir);
-    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 40.0);
-    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 100.0f);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 10.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 2.0f);
     glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse_light);
 
     glMatrixMode(GL_PROJECTION);
@@ -150,21 +150,21 @@ int main(int argc, char *argv[]) {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
+    glEnable(GL_BLEND);
     glShadeModel(GL_SMOOTH);
-    GLfloat  ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    //glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 
-    float light0_position[] = { 10, 10.0, 10.0f , 1.0f};
+    float light0_position[] = { 10.0f, 10.0f, 10.0f , 1.0f};
     float light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
     glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
-    float light1_position[] = { 10, 10.0, 10.0f , 1.0f};
-    float light1_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float light1_position[] = { 10.0f, 10.0f, 10.0f , 1.0f};
+    float light1_diffuse[] = { 0.1f, 0.7f, 1.0f, 1.0f };
 
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
     glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
@@ -206,6 +206,7 @@ int main(int argc, char *argv[]) {
 
         switch (csX75::key_pressed) {
             case 257:
+                turned = 0;
                 legs = 1; arms = 1; flaps = 1; body = 1;
                 leg_rotated = (leg_rotated + 1) %2;
                 arm_rotated = (arm_rotated+1)% 2;
@@ -251,6 +252,12 @@ int main(int argc, char *argv[]) {
                 break;
             case 'H':
                 headlight = (headlight + 1) % 2;
+                break;
+            case 'L':
+                if (sunlight < 1.0) sunlight += 0.05;
+                break;
+            case 'K':
+                if (sunlight > 0.0) sunlight -= 0.05;
                 break;
             default:
                 break;
@@ -397,6 +404,9 @@ int main(int argc, char *argv[]) {
             glEnable(GL_LIGHT2);
         }
         else glDisable(GL_LIGHT2);
+
+        GLfloat  ambientLight[] = {sunlight, sunlight, sunlight, 1.0f};
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 
         // Render here
         renderGL();

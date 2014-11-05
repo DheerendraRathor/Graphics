@@ -85,4 +85,6 @@ extern int l1_enable;
 extern int headlight;
 extern int turn_command;
 extern double top_cam;
+
+extern double sunlight;
 #endif /* TRANSFORM_HPP_ */
