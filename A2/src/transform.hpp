@@ -43,6 +43,7 @@ extern int body;
 //Indivisual rotation
 extern double rotation;
 extern string selected;
+
 extern double lLeg1f;
 extern double lLeg2f;
 extern double lLeg3f;
@@ -87,4 +88,5 @@ extern int turn_command;
 extern double top_cam;
 
 extern double sunlight;
+
 #endif /* TRANSFORM_HPP_ */

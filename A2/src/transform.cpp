@@ -36,7 +36,7 @@ int legs = 0;
 int arms = 0;
 int flaps = 0;
 
-string selected = "";
+string selected = "null";
 double rotation = 1.0;
 
 double lLeg1f = 0.0;

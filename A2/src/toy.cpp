@@ -23,6 +23,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <fstream>
 
 #include "gl_framework.hpp"
 
@@ -32,6 +33,8 @@
 #include "display_list.hpp"
 #include "texture.hpp"
 #include "draw_env.hpp"
+#include "keyframe.hpp"
+
 
 #define PI 3.14159265
 
@@ -41,12 +44,6 @@ bool file_flag = false;
 namespace csX75{
 int key_pressed;
 }
-
-
-double rotate = 1.0;
-double angle = 0.0;
-double x = 0.0;
-double z = 0.0;
 
 //GLFW display callback
 void renderGL() {
@@ -102,7 +99,7 @@ void renderGL() {
     draw_env();
 
     draw_body();
-    rotate++;
+
 
 
 }
@@ -195,6 +192,8 @@ int main(int argc, char *argv[]) {
     //Calling display list
     genDisplayList();
     //std::cerr<<side_flap<<std::endl;
+    int mode = 0;
+    int car_mode = 0;
 
     // Loop until the user closes the window
     while (glfwWindowShouldClose(window) == 0) {
@@ -203,68 +202,237 @@ int main(int argc, char *argv[]) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        switch (csX75::key_pressed) {
-            case 257:
-                turned = 0;
-                legs = 1; arms = 1; flaps = 1; body = 1;
-                leg_rotated = (leg_rotated + 1) %2;
-                arm_rotated = (arm_rotated+1)% 2;
-                flaps_rotated = (flaps_rotated + 1)%2;
-                body_rotated = (body_rotated + 1) %2;
-                break;
-            case 265:
-                if (speed < 2000) speed += 200;
-                break;
-            case 264:
-                if (speed > -500) speed -= 200;
-                break;
-            case 'C':
-                camera_setup = (camera_setup + 1) % 4;
-                break;
-            case 263:
-                if (speed) {
-                    turned = turned - 1;
+        switch(csX75::key_pressed){
+            case 'P':
+                mode = (mode+1)%2;
+                if(mode){
+                    cout<<"Playback Mode"<<endl;
                 }
-                if (leg_wheel_turn < 30){
-                    leg_wheel_turn += 10;
-                }
-                break;
-            case 262:
-                if (speed) {
-                    turned = turned + 1;
-                }
-                if (leg_wheel_turn > -30){
-                    leg_wheel_turn -= 10;
-                }
-                break;
-            case 'Q':
-                l0_enable = (l0_enable + 1) % 2;
-                break;
-            case 'W':
-                l1_enable = (l1_enable + 1) % 2;
-                break;
-            case 'M':
-                if(camera_setup == 1)top_cam += 2;
-                break;
-            case 'N':
-                if(camera_setup == 1)top_cam -= 2;
-                break;
-            case 'H':
-                headlight = (headlight + 1) % 2;
-                break;
-            case 'L':
-                if (sunlight < 1.0) sunlight += 0.05;
-                break;
-            case 'K':
-                if (sunlight > 0.0) sunlight -= 0.05;
-                break;
-            default:
+                else cout<<"Recording Mode"<<endl;
                 break;
         }
+
+        if(mode == 1){
+            playback();
+        }
+
+        if(mode==0){
+            switch(csX75::key_pressed){
+                case 'S':
+                    car_mode = (car_mode + 1) %2;
+                    break;
+                case 'G':
+                    record_key_frame();
+                    break;
+            }
+
+            if(car_mode == 1){
+                switch (csX75::key_pressed) {
+                    case 257:
+                        turned = 0;
+                        legs = 1; arms = 1; flaps = 1; body = 1;
+                        leg_rotated = (leg_rotated + 1) %2;
+                        arm_rotated = (arm_rotated+1)% 2;
+                        flaps_rotated = (flaps_rotated + 1)%2;
+                        body_rotated = (body_rotated + 1) %2;
+                        break;
+                    case 265:
+                        if (speed < 2000) speed += 200;
+                        break;
+                    case 264:
+                        if (speed > -500) speed -= 200;
+                        break;
+                    case 'C':
+                        camera_setup = (camera_setup + 1) % 4;
+                        break;
+                    case 263:
+                        if (speed) {
+                            turned = turned - 1;
+                        }
+                        if (leg_wheel_turn < 30){
+                            leg_wheel_turn += 10;
+                        }
+                        break;
+                    case 262:
+                        if (speed) {
+                            turned = turned + 1;
+                        }
+                        if (leg_wheel_turn > -30){
+                            leg_wheel_turn -= 10;
+                        }
+                        break;
+                    case 'Q':
+                        l0_enable = (l0_enable + 1) % 2;
+                        break;
+                    case 'W':
+                        l1_enable = (l1_enable + 1) % 2;
+                        break;
+                    case 'M':
+                        if(camera_setup == 1)top_cam += 2;
+                        break;
+                    case 'N':
+                        if(camera_setup == 1)top_cam -= 2;
+                        break;
+                    case 'H':
+                        headlight = (headlight + 1) % 2;
+                        break;
+                    case 'L':
+                        if (sunlight < 1.0) sunlight += 0.05;
+                        break;
+                    case 'K':
+                        if (sunlight > 0.0) sunlight -= 0.05;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if(car_mode == 0){
+                switch (csX75::key_pressed) {
+                    case 257:
+                        legs = 1; arms = 1; flaps = 1; body = 1;
+                        leg_rotated = (leg_rotated + 1) %2;
+                        arm_rotated = (arm_rotated+1)% 2;
+                        flaps_rotated = (flaps_rotated + 1)%2;
+                        body_rotated = (body_rotated + 1) %2;
+                        break;
+                    case 'L':
+                        legs = 1;
+                        leg_rotated = (leg_rotated + 1) %2;
+                        break;
+                    case 'A':
+                        arms = 1;
+                        arm_rotated = (arm_rotated+1)% 2;
+                        break;
+                    case 'F':
+                        flaps = 1;
+                        flaps_rotated = (flaps_rotated + 1)%2;
+                        break;
+                    case 'T':
+                        selected = "torso";
+                        break;
+                    case 'N':
+                        selected = "neck";
+                        break;
+                    case 'Q':
+                        selected = "lArm";
+                        break;
+                    case 'Z':
+                        selected = "rArm";
+                        break;
+                    case 'W':
+                        selected = "lArmLower";
+                        break;
+                    case 'X':
+                        selected = "rArmLower";
+                        break;
+                    case 'I':
+                        selected = "lLeg";
+                        break;
+                    case 'M':
+                        selected = "rLeg";
+                        break;
+                    case 'U':
+                        selected = "lLegLower";
+                        break;
+                    case 'Y':
+                        selected = "rLegLower";
+                        break;
+                    case 44:
+                        if (selected == "torso") torso3f += rotation;
+                        else if (selected == "neck") neck3f += rotation;
+                        else if (selected == "lArm") lArm3f += rotation;
+                        else if (selected == "rArm") rArm3f += rotation;
+                        else if (selected == "lLeg") lLeg3f += rotation;
+                        else if (selected == "rLeg") rLeg3f += rotation;
+
+                        break;
+                    case 46:
+                        if (selected == "torso") torso3f -= rotation;
+                        else if (selected == "neck") neck3f -= rotation;
+                        else if (selected == "lArm") lArm3f -= rotation;
+                        else if (selected == "rArm") rArm3f -= rotation;
+                        else if (selected == "lLeg") lLeg3f -= rotation;
+                        else if (selected == "rLeg") rLeg3f -= rotation;
+                        break;
+                    case 263:
+                        if (selected == "torso") torso2f -= rotation;
+                        else if (selected == "neck") neck2f -= rotation;
+                        else if (selected == "lArm") lArm2f -= rotation;
+                        else if (selected == "rArm") rArm2f -= rotation;
+                        else if (selected == "lLeg") lLeg2f -= rotation;
+                        else if (selected == "rLeg") rLeg2f -= rotation;
+                        break;
+                    case 262:
+                        if (selected == "torso") torso2f += rotation;
+                        else if (selected == "neck") neck2f += rotation;
+                        else if (selected == "lArm") lArm2f += rotation;
+                        else if (selected == "rArm") rArm2f += rotation;
+                        else if (selected == "lLeg") lLeg2f += rotation;
+                        else if (selected == "rLeg") rLeg2f += rotation;
+                        break;
+                    case 264:
+                        if (selected == "torso") torso1f -= rotation;
+                        else if (selected == "neck") neck1f -= rotation;
+                        else if (selected == "lArm") lArm1f -= rotation;
+                        else if (selected == "rArm") rArm1f -= rotation;
+                        else if (selected == "lLeg") lLeg1f -= rotation;
+                        else if (selected == "rLeg") rLeg1f -= rotation;
+                        else if (selected == "lArmLower") lArmLower1f -= rotation;
+                        else if (selected == "rArmLower") rArmLower1f -= rotation;
+                        else if (selected == "lLegLower") lLegLower1f -= rotation;
+                        else if (selected == "rLegLower") rLegLower1f -= rotation;
+                        break;
+                    case 265:
+                        if (selected == "torso") torso1f += rotation;
+                        else if (selected == "neck") neck1f += rotation;
+                        else if (selected == "lArm") lArm1f += rotation;
+                        else if (selected == "rArm") rArm1f += rotation;
+                        else if (selected == "lLeg") lLeg1f += rotation;
+                        else if (selected == "rLeg") rLeg1f += rotation;
+                        else if (selected == "lArmLower") lArmLower1f += rotation;
+                        else if (selected == "rArmLower") rArmLower1f += rotation;
+                        else if (selected == "lLegLower") lLegLower1f += rotation;
+                        else if (selected == "rLegLower") rLegLower1f += rotation;
+                        break;
+                    case 'R':
+                        rotation = 1.0;
+                        torso1f = 0.0;
+                        torso2f = 0.0;
+                        torso3f = 0.0;
+                        neck1f = 0.0;
+                        neck2f = 0.0;
+                        neck3f = 0.0;
+                        lArm1f = 0.0;
+                        lArm2f = 0.0;
+                        lArm3f = 0.0;
+                        rArm1f = 0.0;
+                        rArm2f = 0.0;
+                        rArm3f = 0.0;
+                        lLeg1f = 0.0;
+                        lLeg2f = 0.0;
+                        lLeg3f = 0.0;
+                        rLeg1f = 0.0;
+                        rLeg2f = 0.0;
+                        rLeg3f = 0.0;
+                        lArmLower1f = 0.0;
+                        rArmLower1f = 0.0;
+                        lLegLower1f = 0.0;
+                        rLegLower1f = 0.0;
+                        selected = "null";
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+
         if (csX75::key_pressed - 48 < 10 && (csX75::key_pressed - 48 >0)){
             rotation = csX75::key_pressed - 48;
         }
+
         csX75::key_pressed = 0;
         //std::cerr<<legs<<std::endl;
         //std::cerr<<"upper_leg::"<<leg_back<<std::endl;
