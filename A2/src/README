@@ -1,14 +1,30 @@
 1.
+prerequisites: gcc 4.9+, Open GL 2.1 +, SOIL library (see point 6 for this), ffmpeg (point 6) and mogrify
 To compile just type "make" on the command line.
+To create video after frames recording in "record" folder user "make video" to create videos (with and without audio)
+To clean the project use "make clean". This will delete all videos, recorded frames with keyframes.txt
 
 2.
 Pressing ESC will quit the program.
 
 3.
 Use: 
-a. use ./toyTransformer to run the executable file
-b. press ESC or x button on window to quit
-c. Key Bindings:
+There are three modes of programs:
+a. playback mode without frame recording: This mode will play the pre-recorded keyframes in keyframes.txt 
+with linear interpolation.
+b. playback mode with frames recording: this mode will play the pre-recorded mode and also store the frame-by-frame
+images in "record" folder at the specified fps. You have to initiate this flag by "./toyTransformers -r" 
+c. Record mode: In this mode you can play with toyTransformers and record the key-frames 
+
+Key-binding: 
+a. P : this will toggle between record mode and playback mode (default is record mode)
+The following key binding will work in record mode:
+    S: toggle between car-control and open mode
+    G: Grab current frame as key-frame and save into keyframes.txt
+    
+    In car control mode you can play with car only, like speeding up, turning, lights, headlight etc.
+    In open mode you can play with indivisual part independently 
+    Contols in car mode:
     ENTER: transform into vehicle from autobot and vice versa.
     'C': toggle between various camera mode
     'N': zoom out when top camera is enabled
@@ -20,16 +36,43 @@ c. Key Bindings:
     'Down Arrow': retard car
     'Left Arrow': turn car to left
     'Right Arrow': turn car to right
-4.
+    
+    Controls in open-mode:
+    ENTER: transform into vehicle from autobot and vice versa.
+    A: transform only arms into vehicular arms from autobot and vice versa.
+    L: transform only legs into vehicular legs from autobot and vice versa.
+    F: transform flaps and hood back and forth
+    T: select torso
+    N: Select Neck
+    Q: Select Left Arm
+    Z: select Right Arm
+    W: select left lower arm
+    X: select right lower arm
+    I: select left leg
+    M: select right leg
+    U: select left lower leg
+    Y: select right lower leg
+    <: Rotate selected element about z axis clockwise 
+    >: rotate selected element about z axis anticlockwise
+    Up Arrow: Rotate selected element about x axis upward
+    Down Arrow: Rotate selected element about x axis downwards
+    Left Arrow: Rotate selected element about y axis forward rotation
+    Right arrow : Rotate selecte element about y axis backward rotation.
+    R: reset every rotation about selected elements to there original (before starting rotation stage)
+    Num keys (1-9) on main keyboard: select rotation speed (selected integer degree per command)    
+    
 This code uses OpenGL 2.1.
 
-5. Link to report
-http://www.cse.iitb.ac.in/~dheerendra/graphics/a2/
+5. 
+Link to report : http://www.cse.iitb.ac.in/~dheerendra/graphics/a2/
+Link to youtube video: https://www.youtube.com/watch?v=MTyY5xDMv2Q
 
 6.
 Sources used:
+ffmpeg: https://www.ffmpeg.org/download.html
 Texture mapping is done with SOIL library http://www.lonesock.net/soil.html
 Image courtesy: Google Images
+Audio courtesy: https://www.youtube.com/watch?v=gWn4Csu3Kc8
 
 7. 
 All code is written by me without using any other source except mentioned above.
