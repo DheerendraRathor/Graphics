@@ -128,6 +128,7 @@ void playback_prepare(){
     diff_d[40] = (diff_d[40] - turned)/fps;
     diff_d[41] = (diff_d[41] - top_cam)/fps;
     diff_d[42] = (diff_d[42] - sunlight)/fps;
+    //diff_speed = (diff_speed - speed) /fps;
 
 }
 
@@ -178,6 +179,7 @@ void playback(){
     turned += diff_d[40];
     top_cam += diff_d[41];
     sunlight += diff_d[42];
+    //speed += diff_speed;
 
     frame_count++;
 }
