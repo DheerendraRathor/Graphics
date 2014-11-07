@@ -195,6 +195,7 @@ int main(int argc, char *argv[]) {
     int mode = 0;
     int car_mode = 0;
 
+
     // Loop until the user closes the window
     while (glfwWindowShouldClose(window) == 0) {
 
@@ -575,6 +576,14 @@ int main(int argc, char *argv[]) {
 
         GLfloat  ambientLight[] = {sunlight, sunlight, sunlight, 1.0f};
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+        static double start = 0, diff, wait;
+        wait = 1 / fps;
+        diff = glfwGetTime() - start;
+        if (diff < wait) {
+            usleep((wait-diff) * 1000000);
+        }
+        start = glfwGetTime();
 
         // Render here
         renderGL();
