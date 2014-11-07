@@ -37,9 +37,11 @@
 
 
 #define PI 3.14159265
+//screen size
+int win_width = 512;
+int win_height = 512;
+int framenum = 0;
 
-std::string filename, progname;
-bool file_flag = false;
 
 namespace csX75{
 int key_pressed;
@@ -106,7 +108,6 @@ void renderGL() {
 
 
 int main(int argc, char *argv[]) {
-    progname = argv[0];
 
     //! The pointer to the GLFW window
     GLFWwindow* window;
@@ -117,9 +118,6 @@ int main(int argc, char *argv[]) {
     //! Initialize GLFW
     if (!glfwInit())
         return -1;
-
-    int win_width = 512;
-    int win_height = 512;
 
     //! Create a windowed mode window and its OpenGL context
     window = glfwCreateWindow(win_width, win_height, "ToyLOGO", NULL, NULL);
@@ -215,6 +213,13 @@ int main(int argc, char *argv[]) {
 
         if(mode == 1){
             playback();
+            static double start = 0, diff, wait;
+            wait = 1.0 / fps;
+            diff = glfwGetTime() - start;
+            if (diff < wait) {
+                sleep((wait-diff));
+            }
+            start = glfwGetTime();
         }
 
         if(mode==0){
@@ -346,8 +351,8 @@ int main(int argc, char *argv[]) {
                         else if (selected == "rArm") rArm3f += rotation;
                         else if (selected == "lLeg") lLeg3f += rotation;
                         else if (selected == "rLeg") rLeg3f += rotation;
-
                         break;
+
                     case 46:
                         if (selected == "torso") torso3f -= rotation;
                         else if (selected == "neck") neck3f -= rotation;
@@ -356,6 +361,7 @@ int main(int argc, char *argv[]) {
                         else if (selected == "lLeg") lLeg3f -= rotation;
                         else if (selected == "rLeg") rLeg3f -= rotation;
                         break;
+
                     case 263:
                         if (selected == "torso") torso2f -= rotation;
                         else if (selected == "neck") neck2f -= rotation;
@@ -364,6 +370,7 @@ int main(int argc, char *argv[]) {
                         else if (selected == "lLeg") lLeg2f -= rotation;
                         else if (selected == "rLeg") rLeg2f -= rotation;
                         break;
+
                     case 262:
                         if (selected == "torso") torso2f += rotation;
                         else if (selected == "neck") neck2f += rotation;
@@ -372,6 +379,7 @@ int main(int argc, char *argv[]) {
                         else if (selected == "lLeg") lLeg2f += rotation;
                         else if (selected == "rLeg") rLeg2f += rotation;
                         break;
+
                     case 264:
                         if (selected == "torso") torso1f -= rotation;
                         else if (selected == "neck") neck1f -= rotation;
@@ -384,6 +392,7 @@ int main(int argc, char *argv[]) {
                         else if (selected == "lLegLower") lLegLower1f -= rotation;
                         else if (selected == "rLegLower") rLegLower1f -= rotation;
                         break;
+
                     case 265:
                         if (selected == "torso") torso1f += rotation;
                         else if (selected == "neck") neck1f += rotation;
@@ -396,6 +405,7 @@ int main(int argc, char *argv[]) {
                         else if (selected == "lLegLower") lLegLower1f += rotation;
                         else if (selected == "rLegLower") rLegLower1f += rotation;
                         break;
+
                     case 'R':
                         rotation = 1.0;
                         torso1f = 0.0;
@@ -577,16 +587,14 @@ int main(int argc, char *argv[]) {
         GLfloat  ambientLight[] = {sunlight, sunlight, sunlight, 1.0f};
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 
-        static double start = 0, diff, wait;
-        wait = 1 / fps;
-        diff = glfwGetTime() - start;
-        if (diff < wait) {
-            usleep((wait-diff) * 1000000);
-        }
-        start = glfwGetTime();
-
         // Render here
         renderGL();
+        if (mode == 1 && argc > 1){
+            if (argv[1][1] == 'r'){
+                capture_frame(framenum, win_width, win_height);
+                ++framenum;
+            }
+        }
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

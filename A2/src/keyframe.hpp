@@ -13,6 +13,7 @@ extern int fps;
 void record_key_frame();
 void playback_prepare();
 void playback();
+void capture_frame(int, int, int);
 
 
 #endif /* KEYFRAME_HPP_ */

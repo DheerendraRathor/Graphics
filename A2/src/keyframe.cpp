@@ -9,13 +9,13 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-
+#include <GL/glew.h>
 #include "keyframe.hpp"
 #include "transform.hpp"
 using namespace std;
 
 //external variable
-int fps = 25;
+int fps = 20;
 
 //internal variable
 int line_number = 0;
@@ -55,6 +55,11 @@ void playback_prepare(){
 
     while (getline(myfile, line))
         ++linecount;
+
+    if (linecount == 0){
+        cerr<<"Nothing found in keyframes.txt (may be empty file)"<<endl;
+        return;
+    }
 
     ifstream readfile("keyframes.txt");
     int line_to_read = (line_number*2) % linecount + 1;
@@ -175,4 +180,27 @@ void playback(){
     sunlight += diff_d[42];
 
     frame_count++;
+}
+
+void capture_frame(int framenum, int SCREEN_WIDTH, int SCREEN_HEIGHT)
+{
+  unsigned char *pRGB = new unsigned char [3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1) ];
+
+  // set the framebuffer to read
+  //default for double buffered
+  glReadBuffer(GL_BACK);
+
+  glPixelStoref(GL_PACK_ALIGNMENT,1);//for word allignment
+
+  glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pRGB);
+  char filename[200];
+  sprintf(filename,"./record/frame_%04d.ppm",framenum);
+  std::ofstream out(filename, std::ios::out);
+  out<<"P6"<<std::endl;
+  out<<SCREEN_WIDTH<<" "<<SCREEN_HEIGHT<<" 255"<<std::endl;
+  out.write(reinterpret_cast<char const *>(pRGB), (3 * (SCREEN_WIDTH+1) * (SCREEN_HEIGHT + 1)) * sizeof(int));
+  out.close();
+
+
+  delete pRGB;
 }
